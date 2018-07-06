@@ -18,10 +18,10 @@ const ProfileSchema = new Schema({
 	},
 	website: {
 		type: String
-	}
+	},
 	location: {
 		type: String
-	}
+	},
 	status: {
 		type: String,
 		required: true
@@ -32,7 +32,7 @@ const ProfileSchema = new Schema({
 	},
 	bio: {
 		type: String
-	}
+	},
 	githubusername: {
 		type: String
 	},
