@@ -33,7 +33,7 @@ router.get('/', passport.authenticate('jwt', { session: false }),(req, res) => {
 
 
 // @route   POST api/profile
-// @desc    Create user profile
+// @desc    Create or edit user profile
 // @access  Private
 
 router.post('/', passport.authenticate('jwt', { session: false }),(req, res) => {
@@ -48,7 +48,7 @@ router.post('/', passport.authenticate('jwt', { session: false }),(req, res) => 
 	if(req.body.githubusername) profileFields.githubusername = req.body.githubusername;
 
 	// Skills -- split into array
-	if(typeof req.body.skills 1== 'undefined') {
+	if(typeof req.body.skills !== 'undefined') {
 		profileFields.skills = req.body.skills.split(',');
 	}
 
@@ -61,7 +61,18 @@ router.post('/', passport.authenticate('jwt', { session: false }),(req, res) => 
 	if(req.body.facebook) profileFields.social.facebook = req.body.facebook;
 	if(req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
 	if(req.body.instagram) profileFields.social.instagram = req.body.instagram;
-});
+
+	profile.findOne({ user: req.user.id })
+		.then(profile => {
+			if(profile) {
+				// Update
+				Profile.findOneAndUpdate({ user: req.user.id }, { $set: profileFields }, { new: true })
+			} else {
+
+			}
+		})
+	}
+);
 
 
 module.exports = router;
