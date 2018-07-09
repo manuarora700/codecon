@@ -24,6 +24,7 @@ router.get('/test', (req, res) => res.json({ msg: 'Profile Works' }));
 router.get('/', passport.authenticate('jwt', { session: false }),(req, res) => {
 	const errors = {};
 	Profile.findOne({ user: req.user.id })
+		.populate('user', ['name', 'avatar'])
 		.then(profile => {
 			if(!profile) {
 				errors.noprofile = 'There is no profile for this user';
@@ -76,7 +77,7 @@ router.post('/', passport.authenticate('jwt', { session: false }),(req, res) => 
 	if(req.body.linkedin) profileFields.social.linkedin = req.body.linkedin;
 	if(req.body.instagram) profileFields.social.instagram = req.body.instagram;
 
-	profile.findOne({ user: req.user.id })
+	Profile.findOne({ user: req.user.id })
 		.then(profile => {
 			if(profile) {
 				// Update
